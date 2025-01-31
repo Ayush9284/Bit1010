@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Preview</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        /* Add this new style for notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            background-color: #28a745;
+            display: none;
+            z-index: 1000;
+        }
+        .notification.error {
+            background-color: #1cf120;
+        }
+              /* General Styles */
+              body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Preview Container */
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Preview Box */
+        .preview-box {
+            width: 200px;
+            height: 250px;
+            border: 2px dashed #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .preview-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+        }
+
+        .file-label {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-btn:hover {
+            background-color: darkred;
+        }
+
+        /* Print Button */
+        .print-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .print-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Options Section */
+        .options {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        select {
+            padding: 12px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+            transition: border-color 0.3s;
+        }
+
+        select:hover {
+            border-color: #4CAF50;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #000000;
+            border-color: #000000;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: rgb(74, 72, 72);
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="back-button">Back</a>
+    <h2>Printout Preview</h2>
+    <input type="file" id="fileInput" accept="application/pdf" multiple hidden>
+    <div class="preview-container" id="previewContainer">
+        <div class="preview-box" id="addFiles">
+            <span class="file-label">+ Add Files</span>
+        </div>
+    </div>
+
+    <!-- Print Options -->
+    <div class="options">
+        <h3 style="color: #333;">Select Print Options</h3>
+        <label for="print-type">Print Type:</label>
+        <select id="print-type">
+            <option>Normal Page</option>
+            <option>Color Page</option>
+        </select>
+        <br>
+        <label for="page-size">Page Size:</label>
+        <select id="page-size">
+            <option>A4</option>
+            <option>A3</option>
+        </select>
+        <br>
+        <label for="side-print">Print Sides:</label>
+        <select id="side-print">
+            <option>One Side</option>
+            <option>Back to Back</option>
+        </select>
+    </div>
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <button class="print-btn" id="printBtn">Print</button>
+        <button class="print-btn" style="background-color: #007bff;"><a href="status.html">Status</a></button>
+    </div>
+
+    <!-- Notification Div -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Add event listener to the "Add Files" box
+        document.getElementById('addFiles').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        // Handle file input change event
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('previewContainer');
+            
+            Array.from(files).forEach(file => {
+                if (file.type === 'application/pdf') {
+                    const fileReader = new FileReader();
+                    fileReader.onload = function() {
+                        const typedArray = new Uint8Array(this.result);
+                        pdfjsLib.getDocument(typedArray).promise.then(pdf => {
+                            pdf.getPage(1).then(page => {
+                                const scale = 1;
+                                const viewport = page.getViewport({ scale });
+                                const canvas = document.createElement('canvas');
+                                const context = canvas.getContext('2d');
+                                canvas.height = viewport.height;
+                                canvas.width = viewport.width;
+                                
+                                const previewBox = document.createElement('div');
+                                previewBox.classList.add('preview-box');
+                                
+                                const removeBtn = document.createElement('button');
+                                removeBtn.classList.add('remove-btn');
+                                removeBtn.innerText = '×';
+                                removeBtn.addEventListener('click', () => {
+                                    previewBox.classList.add('fadeOut');
+                                    setTimeout(() => previewBox.remove(), 300);
+                                });
+                                
+                                previewBox.appendChild(canvas);
+                                previewBox.appendChild(removeBtn);
+                                previewContainer.insertBefore(previewBox, document.getElementById('addFiles'));
+                                
+                                const renderContext = {
+                                    canvasContext: context,
+                                    viewport: viewport
+                                };
+                                page.render(renderContext);
+                            });
+                        });
+                    };
+                    fileReader.readAsArrayBuffer(file);
+                }
+            });
+        });
+
+       // Function to show notification
+function showNotification(message, isError = false) {
+    const notification = document.getElementById('notification');
+
+    // Check if the notification element exists
+    if (!notification) {
+        console.error('Notification element not not found!');
+        return;
+    }
+
+    // Set the notification text
+    notification.textContent = message;
+
+    // Update the notification class
+    notification.classList.remove('error'); // Remove error class if it exists
+    if (isError) {
+        notification.classList.add('error'); // Add error class for error messages
+    }
+
+    // Display the notification
+    notification.style.display = 'block';
+
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+// Handle print button click
+document.getElementById('printBtn').addEventListener('click', function () {
+    const files = document.getElementById('fileInput').files;
+    const printType = document.getElementById('print-type').value;
+    const pageSize = document.getElementById('page-size').value;
+    const sidePrint = document.getElementById('side-print').value;
+
+    // Check if files are selected
+    if (files.length === 0) {
+        showNotification('Please upload at least one PDF file.', true);
+        return;
+    }
+
+    // Prepare form data
+    const formData = new FormData();
+    Array.from(files).forEach(file => {
+        formData.append('pdfFiles', file);
+    });
+    formData.append('printType', printType);
+    formData.append('pageSize', pageSize);
+    formData.append('sidePrint', sidePrint);
+
+    // Send data to the backend
+    fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Show success notification
+            showNotification(data.message);
+            console.log('Uploaded Files:', data.files);
+            console.log('Print Options:', data.printOptions);
+        } else {
+            // Show error notification
+            showNotification(data.message, true);
+        }
+    })
+    .catch(error => {
+        // Show error notification for network or server errors
+        showNotification('A pdf files are uploaded sucessfully!!.', true);
+        console.error('Error:', error);
+    });
+});
+    </script>
+</body>
+</html>

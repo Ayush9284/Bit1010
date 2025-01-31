@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Service Status</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff6f61;
+        }
+
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .pending {
+            color: #FF9800; /* Orange for pending status */
+        }
+
+        .ready {
+            color: #4CAF50; /* Green for ready status */
+        }
+
+        .message {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff6f61;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #ffcccb;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .status {
+                font-size: 18px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Print Service Status</h1>
+        <div class="status pending">Your Printouts Are Pending</div>
+        <div class="message">
+            Your printouts are being processed. Please check back later.
+        </div>
+        <a class="button" href="printout.html">Close</a>
+    </div>
+
+    <script>
+        // Simulate backend signal (replace this with actual API call)
+        function checkPrintStatus() {
+            // Simulate a backend signal after 5 seconds
+            setTimeout(() => {
+                updateStatus("ready");
+            }, 5000); // Replace this with actual backend polling or WebSocket
+        }
+
+        // Function to update status
+        function updateStatus(status) {
+            const statusElement = document.querySelector('.status');
+            const messageElement = document.querySelector('.message');
+
+            if (status === "ready") {
+                statusElement.classList.remove('pending');
+                statusElement.classList.add('ready');
+                statusElement.textContent = 'Your Printouts Are Ready!';
+                messageElement.textContent = 'Please visit the shop to collect your printouts. Thank you for choosing our service!';
+            } else {
+                statusElement.classList.remove('ready');
+                statusElement.classList.add('pending');
+                statusElement.textContent = 'Your Printouts Are Pending';
+                messageElement.textContent = 'Your printouts are being processed. Please check back later.';
+            }
+        }
+
+        // Initial check for status
+        checkPrintStatus();
+    </script>
+</body>
+</html>

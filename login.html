@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .brand {
+            font-size: 40px;
+            font-weight: bold;
+            color: blue;
+            margin-bottom: 40px;
+        }
+        .login-container {
+            height: 300px;
+            width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .blue { color: blue; }
+        .yellow { color: orange; }
+        .input-group {
+            margin: 15px 0;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        button {
+            margin-top: 10px;
+            background: rgb(238, 238, 242);
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 40%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .black1{
+            color: blue;
+        }
+        .black2{
+            color: blue;
+        }
+
+    </style>
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <div class="brand"><span class="black1">Inno</span><span class="black2">Campus</span></div>
+
+    <div class="login-container">
+        <h2><span class="blue">Student</span> <span class="yellow">Sign-In</span></h2>
+        <form>
+            <div class="input-group">
+                <input type="text" placeholder="Username" required>
+            </div>
+            <div class="input-group password-container">
+                <input type="password" id="password" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+            </div>
+            <button type="submit"><a href="home.html">Login</a></button>
+            <div class="links">
+                <a href="#">Help</a>
+                <a href="#">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

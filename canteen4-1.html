@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Ordering System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      color: #4CAF50;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .menu-item {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: calc(25% - 20px);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .menu-item h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .menu-item p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #666;
+    }
+
+    .quantity {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .order-summary {
+      margin-top: 50px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-summary h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+
+    .order-summary ul {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .order-summary li {
+      margin: 10px 0;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    #total-price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    #place-order {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.2rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #place-order:hover {
+      background-color: #45a049;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .menu {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .menu-item {
+        width: 80%;
+      }
+
+      .order-summary {
+        margin-top: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍴 Food Ordering System</h1>
+    <div class="menu">
+      <!-- Menu Items -->
+      <div class="menu-item" data-price="70" data-name="Bhurji-Pav">
+        <img src="canteen41ima\bhurji.jpg" alt="Bhurji-Pav">
+        <h3>Bhurji-Pav</h3>
+        <p>₹70</p>
+        <input type="number" min="0" value="0" class="quantity">
+        <button class="add-to-order"><i class="fas fa-cart-plus"></i> Add to Order</button>
+      </div>
+      <div class="menu-item" data-price="55" data-name="Chapati Bhaji">
+        <img src="canteen41ima\chapati.jpg" alt="Chapati Bhaji">
+        <h3>Chapati Bhaji</h3>
+        <p>₹55</p>
+        <input type="number" min="0" value="0" class="quantity">
+        <button class="add-to-order"><i class="fas fa-cart-plus"></i> Add to Order</button>
+      </div>
+      <div class="menu-item" data-price="70" data-name="Special Thali">
+        <img src="canteen41ima\thali.jpg" alt="Special Thali">
+        <h3>Special Thali</h3>
+        <p>₹70</p>
+        <input type="number" min="0" value="0" class="quantity">
+        <button class="add-to-order"><i class="fas fa-cart-plus"></i> Add to Order</button>
+      </div>
+      <div class="menu-item" data-price="20" data-name="BreadPattice">
+        <img src="canteen41ima\breadpattice.jpg" alt="BreadPattice">
+        <h3>BreadPattice</h3>
+        <p>₹20</p>
+        <input type="number" min="0" value="0" class="quantity">
+        <button class="add-to-order"><i class="fas fa-cart-plus"></i> Add to Order</button>
+      </div>
+      <div class="menu-item" data-price="70" data-name="Misal-Pav">
+        <img src="canteen41ima\misal.jpg" alt="Misal-Pav">
+        <h3>Misal-Pav</h3>
+        <p>₹70</p>
+        <input type="number" min="0" value="0" class="quantity">
+        <button class="add-to-order"><i class="fas fa-cart-plus"></i> Add to Order</button>
+      </div>
+    </div>
+    
+    <div class="order-summary">
+      <h2>🛒 Your Order</h2>
+      <ul id="order-list"></ul>
+      <p id="total-price">Total: ₹0.00</p>
+      <button id="place-order" disabled><i class="fas fa-check"></i> Place Order</button>
+    </div>
+  </div>
+
+  <script>
+    const menuItems = document.querySelectorAll('.menu-item');
+    const orderList = document.getElementById('order-list');
+    const totalPriceElem = document.getElementById('total-price');
+    const placeOrderButton = document.getElementById('place-order');
+
+    let order = [];
+    let totalPrice = 0;
+
+    menuItems.forEach(item => {
+      const addButton = item.querySelector('.add-to-order');
+      const quantityInput = item.querySelector('.quantity');
+
+      addButton.addEventListener('click', () => {
+        const itemName = item.getAttribute('data-name');
+        const itemPrice = parseFloat(item.getAttribute('data-price'));
+        const quantity = parseInt(quantityInput.value);
+
+        if (quantity > 0) {
+          addToOrder(itemName, itemPrice, quantity);
+          quantityInput.value = 0; // Reset quantity input
+        }
+      });
+    });
+
+    function addToOrder(name, price, quantity) {
+      const existingItemIndex = order.findIndex(item => item.name === name);
+
+      if (existingItemIndex >= 0) {
+        order[existingItemIndex].quantity += quantity;
+      } else {
+        order.push({ name, price, quantity });
+      }
+
+      updateOrderSummary();
+    }
+
+    function updateOrderSummary() {
+      orderList.innerHTML = '';
+      totalPrice = 0;
+
+      order.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.name} (x${item.quantity}) - ₹${(item.price * item.quantity).toFixed(2)}`;
+        orderList.appendChild(listItem);
+        totalPrice += item.price * item.quantity;
+      });
+
+      totalPriceElem.textContent = `Total: ₹${totalPrice.toFixed(2)}`;
+
+      if (totalPrice > 0) {
+        placeOrderButton.disabled = false;
+      } else {
+        placeOrderButton.disabled = true;
+      }
+    }
+
+    placeOrderButton.addEventListener('click', () => {
+      alert(`Order placed! Total: $${totalPrice.toFixed(2)}`);
+      order = [];
+      updateOrderSummary();
+    });
+  </script>
+</body>
+</html>

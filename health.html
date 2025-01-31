@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Support Services</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .box {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #ff6f61;
+        }
+
+        .box h2 {
+            font-size: 24px;
+            margin: 20px 0 10px;
+            color: #ff6f61;
+            text-transform: uppercase;
+        }
+
+        .box p {
+            font-size: 16px;
+            margin: 0 20px 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .box button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff6f61;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .box button:hover {
+            background-color: #ffcccb;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .box {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .box {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #000000;
+            border-color: #000000;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: rgb(74, 72, 72);
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="back-button">Back</a>
+    <div class="container">
+        <!-- Counseling Box -->
+        <div class="box">
+            <img src="healthima\counseling.jpg" alt="Counseling">
+            <h2>Counseling</h2>
+            <p>Our professional counselors are here to support and guide you. Reach out for help anytime.</p>
+            <button onclick="greet1()">Request Counseling</button>
+        </div>
+        <script>
+            function greet1(){
+                alert("Your appoinment has been booked...");
+            }
+        </script>
+
+        <!-- Emergency Box -->
+        <div class="box">
+            <img src="healthima\emer(2).jpg" alt="Emergency">
+            <h2>Emergency</h2>
+            <p>In emergencies, click for 24/7 immediate assistance. Our team is always ready to help.</p>
+            <button onclick="greet2()">Emergency Help</button>
+        </div>
+    </div>
+    <script>
+        function greet2(){
+            alert("Emergency responce on the way...");
+        }
+    </script>
+</body>
+</html>
